@@ -1,5 +1,4 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
-import {WindowRefService} from './utils/window-ref.service';
 import {ObservableCacheService} from './observable-cache.service';
 import {ObservableCacheConfig} from './observable-cache.interfaces';
 
@@ -11,7 +10,6 @@ export class ObservableCacheModule {
             ngModule: ObservableCacheModule,
             providers: [
                 {provide: ObservableCacheConfig, useValue: config},
-                WindowRefService,
                 ObservableCacheService
             ]
         };

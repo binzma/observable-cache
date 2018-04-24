@@ -7,7 +7,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
-const window_ref_service_1 = require("./utils/window-ref.service");
 const observable_cache_service_1 = require("./observable-cache.service");
 const observable_cache_interfaces_1 = require("./observable-cache.interfaces");
 let ObservableCacheModule = ObservableCacheModule_1 = class ObservableCacheModule {
@@ -16,7 +15,6 @@ let ObservableCacheModule = ObservableCacheModule_1 = class ObservableCacheModul
             ngModule: ObservableCacheModule_1,
             providers: [
                 { provide: observable_cache_interfaces_1.ObservableCacheConfig, useValue: config },
-                window_ref_service_1.WindowRefService,
                 observable_cache_service_1.ObservableCacheService
             ]
         };

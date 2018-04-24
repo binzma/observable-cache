@@ -3,13 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const lodash_1 = require("lodash");
 const memory_storage_1 = require("./memory-storage");
 class StorageService {
-    constructor(observableCacheConfig, windowRef) {
+    constructor(observableCacheConfig) {
         switch (observableCacheConfig.storageDriver) {
             case 'SessionStorage':
-                this.storage = windowRef.getNativeWindow().sessionStorage;
+                this.storage = window.sessionStorage;
                 break;
             case 'LocalStorage':
-                this.storage = windowRef.getNativeWindow().localStorage;
+                this.storage = window.localStorage;
                 break;
             default:
                 this.storage = new memory_storage_1.MemoryStorage();

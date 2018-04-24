@@ -1,5 +1,4 @@
 import {isNull, isUndefined, isString} from 'lodash';
-import {WindowRefService} from '../utils/window-ref.service';
 import {ObservableCacheConfig} from '../observable-cache.interfaces';
 import {MemoryStorage} from './memory-storage';
 
@@ -7,15 +6,14 @@ export class StorageService {
 
     private storage: Storage;
 
-    constructor(observableCacheConfig: ObservableCacheConfig,
-                windowRef: WindowRefService) {
+    constructor(observableCacheConfig: ObservableCacheConfig) {
 
         switch (observableCacheConfig.storageDriver) {
             case 'SessionStorage':
-                this.storage = windowRef.getNativeWindow().sessionStorage;
+                this.storage = window.sessionStorage;
                 break;
             case 'LocalStorage':
-                this.storage = windowRef.getNativeWindow().localStorage;
+                this.storage = window.localStorage;
                 break;
             default:
                 this.storage = new MemoryStorage();
