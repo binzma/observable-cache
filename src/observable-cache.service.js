@@ -10,7 +10,7 @@ const core_1 = require("@angular/core");
 const Subject_1 = require("rxjs/Subject");
 const lodash_1 = require("lodash");
 require("rxjs/add/operator/do");
-let CachingObservableService = class CachingObservableService {
+let ObservableCacheService = class ObservableCacheService {
     constructor(localStorageService) {
         this.localStorageService = localStorageService;
         this.storage = localStorageService;
@@ -56,8 +56,8 @@ let CachingObservableService = class CachingObservableService {
         return subject.asObservable();
     }
 };
-CachingObservableService = __decorate([
+ObservableCacheService = __decorate([
     core_1.Injectable()
-], CachingObservableService);
-exports.CachingObservableService = CachingObservableService;
-//# sourceMappingURL=caching-observable.service.js.map
+], ObservableCacheService);
+exports.ObservableCacheService = ObservableCacheService;
+//# sourceMappingURL=observable-cache.service.js.map

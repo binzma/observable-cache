@@ -7,21 +7,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
-const caching_observable_service_1 = require("./caching-observable.service");
 const local_storage_service_1 = require("./storage-driver/local-storage.service");
 const window_ref_service_1 = require("./utils/window-ref.service");
 const session_storage_service_1 = require("./storage-driver/session-storage.service");
-let CachingObservableModule = class CachingObservableModule {
+const observable_cache_service_1 = require("./observable-cache.service");
+let ObservableCacheModule = class ObservableCacheModule {
 };
-CachingObservableModule = __decorate([
+ObservableCacheModule = __decorate([
     core_1.NgModule({
         providers: [
-            caching_observable_service_1.CachingObservableService,
+            observable_cache_service_1.ObservableCacheService,
             session_storage_service_1.SessionStorageService,
             local_storage_service_1.LocalStorageService,
             window_ref_service_1.WindowRefService
         ]
     })
-], CachingObservableModule);
-exports.CachingObservableModule = CachingObservableModule;
-//# sourceMappingURL=caching-observable.module.js.map
+], ObservableCacheModule);
+exports.ObservableCacheModule = ObservableCacheModule;
+//# sourceMappingURL=observable-cache.module.js.map

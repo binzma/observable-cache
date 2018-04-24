@@ -1,17 +1,17 @@
 import {NgModule} from '@angular/core';
-import {CachingObservableService} from './caching-observable.service';
 import {LocalStorageService} from './storage-driver/local-storage.service';
 import {WindowRefService} from './utils/window-ref.service';
 import {SessionStorageService} from './storage-driver/session-storage.service';
+import {ObservableCacheService} from './observable-cache.service';
 
 
 @NgModule({
   providers: [
-    CachingObservableService,
+    ObservableCacheService,
     SessionStorageService,
     LocalStorageService,
     WindowRefService
   ]
 })
-export class CachingObservableModule {
+export class ObservableCacheModule {
 }

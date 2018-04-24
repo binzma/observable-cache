@@ -7,7 +7,7 @@ import {isEmpty, isFunction} from 'lodash';
 import 'rxjs/add/operator/do';
 
 @Injectable()
-export class CachingObservableService {
+export class ObservableCacheService {
 
   private storage: StorageService;
 

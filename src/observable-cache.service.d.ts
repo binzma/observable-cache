@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { LocalStorageService } from './storage-driver/local-storage.service';
 import { StorageService } from './storage-driver/storage.service';
 import 'rxjs/add/operator/do';
-export declare class CachingObservableService {
+export declare class ObservableCacheService {
     private localStorageService;
     private storage;
     constructor(localStorageService: LocalStorageService);
