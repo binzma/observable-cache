@@ -1,3 +1,13 @@
+<a name="0.1.3"></a>
+## [0.1.3](https://github.com/binzma/observable-cache/compare/v0.1.2...v0.1.3) (2018-04-24)
+
+
+### Features
+
+* **package:** index.ts ([18a2117](https://github.com/binzma/observable-cache/commit/18a2117))
+
+
+
 <a name="0.1.2"></a>
 ## [0.1.2](https://github.com/binzma/observable-cache/compare/v0.1.1...v0.1.2) (2018-04-24)
 
