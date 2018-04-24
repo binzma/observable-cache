@@ -12,6 +12,7 @@ const lodash_1 = require("lodash");
 require("rxjs/add/operator/do");
 // import {ObservableCacheConfig} from './observable-cache.interfaces';
 const local_storage_1 = require("./storage-driver/local-storage");
+const date_fns_1 = require("date-fns");
 // import {SessionStorage} from './storage-driver/session-storage';
 // import {MemoryStorage} from './storage-driver/memory-storage';
 let ObservableCacheService = class ObservableCacheService {
@@ -42,7 +43,7 @@ let ObservableCacheService = class ObservableCacheService {
      * @param {Function} callback
      * @returns {Observable<any>}
      */
-    cached(storageKey, worker, callback) {
+    asyncUpdate(storageKey, worker, callback) {
         const subject = new Subject_1.Subject();
         // fetch cache
         const cache = this.storageService.getItem(storageKey);
@@ -62,6 +63,43 @@ let ObservableCacheService = class ObservableCacheService {
             .do(res => {
             subject.next(res);
         });
+        return subject.asObservable();
+    }
+    /**
+     * Instantly emits cache if available and queries the resource async if cache is older than afterSeconds.
+     *
+     * @param {string} storageKey
+     * @param {Observable<any>} worker
+     * @param {number} afterSeconds
+     * @param {Function} callback
+     * @returns {Observable<any>}
+     */
+    asyncUpdateAfter(storageKey, worker, afterSeconds, callback) {
+        const subject = new Subject_1.Subject();
+        // fetch cache
+        const cache = this.storageService.getItem(storageKey);
+        // emit cache if valid
+        if (!lodash_1.isEmpty(cache)) {
+            setTimeout(() => subject.next(cache));
+        }
+        // only update if cache is older than afterSeconds
+        const cacheDate = this.storageService.getItem(`${storageKey}-cache-date`);
+        if (!cacheDate || date_fns_1.differenceInSeconds(date_fns_1.parse(cacheDate), new Date()) > afterSeconds) {
+            // start update
+            worker
+                .do(res => {
+                // update cache
+                this.storageService.setItem(storageKey, res);
+                // update cache time
+                this.storageService.setItem(`${storageKey}-cache-date`, date_fns_1.format(new Date()));
+                // when we have a callback function, call it with the new data
+                if (lodash_1.isFunction(callback)) {
+                    callback(res);
+                }
+                // emit the new data
+                subject.next(res);
+            });
+        }
         return subject.asObservable();
     }
 };
