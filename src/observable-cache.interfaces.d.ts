@@ -8,3 +8,9 @@ export interface StorageDriver {
     removeItem(key: string): void;
     setItem(key: string, value: string): void;
 }
+export interface AsyncUpdateConfig {
+    storageKey: string;
+    afterSeconds?: number;
+    beforeUpdate?: Function;
+    afterUpdate?: Function;
+}

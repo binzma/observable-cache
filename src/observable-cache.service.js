@@ -20,6 +20,57 @@ let ObservableCacheService = class ObservableCacheService {
     // import {MemoryStorage} from './storage-driver/memory-storage';
     constructor() {
         this.storageService = new local_storage_1.LocalStorage();
+        // /**
+        //  * Instantly emits cache if available and queries the resource async if cache is older than afterSeconds.
+        //  *
+        //  * @param {string} storageKey
+        //  * @param {Observable<any>} worker
+        //  * @param {number} afterSeconds
+        //  * @param {Function} afterUpdate
+        //  * @returns {Observable<any>}
+        //  */
+        // public asyncUpdateAfter(storageKey: string, worker: Observable<any>, afterSeconds: number, beforeUpdate?: Function, afterUpdate?: Function): Observable<any> {
+        //     const subject = new Subject<any>();
+        //
+        //     // fetch cache
+        //     const cache = this.storageService.getItem(storageKey);
+        //
+        //     // emit cache if valid
+        //     if (!isEmpty(cache)) {
+        //         setTimeout(() => subject.next(cache));
+        //     }
+        //
+        //
+        //     // only update if cache is older than afterSeconds
+        //     const cacheDate = this.storageService.getItem(`${storageKey}-cache-date`);
+        //     if (isEmpty(cacheDate) || differenceInSeconds(parse(cacheDate), new Date()) > afterSeconds) {
+        //
+        //         // when we have a beforeUpdate function, call it now
+        //         if (isFunction(beforeUpdate)) {
+        //             beforeUpdate();
+        //         }
+        //
+        //         // start update
+        //         worker
+        //             .do(res => {
+        //                 // update cache
+        //                 this.storageService.setItem(storageKey, res);
+        //
+        //                 // update cache time
+        //                 this.storageService.setItem(`${storageKey}-cache-date`, format(new Date()));
+        //
+        //                 // when we have a afterUpdate function, call it with the new data
+        //                 if (isFunction(afterUpdate)) {
+        //                     afterUpdate(res);
+        //                 }
+        //
+        //                 // emit the new data
+        //                 subject.next(res);
+        //             });
+        //     }
+        //
+        //     return subject.asObservable();
+        // }
     }
     // constructor(observableCacheConfig: ObservableCacheConfig) {
     //
@@ -38,63 +89,35 @@ let ObservableCacheService = class ObservableCacheService {
     /**
      * Instantly emits cache if available and emits again with the new data after performing the work.
      *
-     * @param {string} storageKey
      * @param {Observable<any>} worker
-     * @param {Function} callback
+     * @param {AsyncUpdateConfig} config
      * @returns {Observable<any>}
      */
-    asyncUpdate(storageKey, worker, callback) {
+    asyncUpdate(worker, config) {
         const subject = new Subject_1.Subject();
         // fetch cache
-        const cache = this.storageService.getItem(storageKey);
-        // emit cache if valid
-        if (!lodash_1.isEmpty(cache)) {
-            setTimeout(() => subject.next(cache));
-        }
-        // update when work is done
-        worker
-            .do(res => this.storageService.setItem(storageKey, res))
-            .do(res => {
-            // when we have a callback function, call it with the new data
-            if (lodash_1.isFunction(callback)) {
-                callback(res);
-            }
-        })
-            .do(res => {
-            subject.next(res);
-        });
-        return subject.asObservable();
-    }
-    /**
-     * Instantly emits cache if available and queries the resource async if cache is older than afterSeconds.
-     *
-     * @param {string} storageKey
-     * @param {Observable<any>} worker
-     * @param {number} afterSeconds
-     * @param {Function} callback
-     * @returns {Observable<any>}
-     */
-    asyncUpdateAfter(storageKey, worker, afterSeconds, callback) {
-        const subject = new Subject_1.Subject();
-        // fetch cache
-        const cache = this.storageService.getItem(storageKey);
+        const cache = this.storageService.getItem(config.storageKey);
         // emit cache if valid
         if (!lodash_1.isEmpty(cache)) {
             setTimeout(() => subject.next(cache));
         }
         // only update if cache is older than afterSeconds
-        const cacheDate = this.storageService.getItem(`${storageKey}-cache-date`);
-        if (lodash_1.isEmpty(cacheDate) || date_fns_1.differenceInSeconds(date_fns_1.parse(cacheDate), new Date()) > afterSeconds) {
+        const cacheDate = this.storageService.getItem(`${config.storageKey}-cache-date`);
+        if (lodash_1.isUndefined(config.afterSeconds) || lodash_1.isEmpty(cacheDate) || date_fns_1.differenceInSeconds(date_fns_1.parse(cacheDate), new Date()) > config.afterSeconds) {
+            // when we have a beforeUpdate function, call it now
+            if (lodash_1.isFunction(config.beforeUpdate)) {
+                config.beforeUpdate();
+            }
             // start update
             worker
                 .do(res => {
                 // update cache
-                this.storageService.setItem(storageKey, res);
+                this.storageService.setItem(config.storageKey, res);
                 // update cache time
-                this.storageService.setItem(`${storageKey}-cache-date`, date_fns_1.format(new Date()));
-                // when we have a callback function, call it with the new data
-                if (lodash_1.isFunction(callback)) {
-                    callback(res);
+                this.storageService.setItem(`${config.storageKey}-cache-date`, date_fns_1.format(new Date()));
+                // when we have a afterUpdate function, call it with the new data
+                if (lodash_1.isFunction(config.afterUpdate)) {
+                    config.afterUpdate(res);
                 }
                 // emit the new data
                 subject.next(res);
