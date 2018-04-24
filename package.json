@@ -31,5 +31,11 @@
     "@types/lodash": "^4.14.107",
     "lodash": "^4.17.5",
     "rxjs": "^5.5.10"
+  },
+  "peerDependencies": {
+    "@angular/core": "^5.2.10",
+    "@types/lodash": "^4.14.107",
+    "lodash": "^4.17.5",
+    "rxjs": "^5.5.10"
   }
 }

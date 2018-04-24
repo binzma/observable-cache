@@ -3,7 +3,7 @@ import {Observable} from 'rxjs/Observable';
 import {LocalStorageService} from './storage-driver/local-storage.service';
 import {StorageService} from './storage-driver/storage.service';
 import {Subject} from 'rxjs/Subject';
-import {isEmpty} from 'lodash';
+import {isEmpty, isFunction} from 'lodash';
 
 @Injectable()
 export class CachingObservableService {
@@ -17,6 +17,8 @@ export class CachingObservableService {
   /**
    * Use this to set a non-default storage service.
    *
+   * TODO put this in config
+   *
    * @param {StorageService} storageService
    */
   public setStorageService(storageService: StorageService): void {
@@ -26,9 +28,12 @@ export class CachingObservableService {
   /**
    * Instantly emits cache if available and emits again with the new data after performing the work.
    *
+   * @param {string} storageKey
+   * @param {Observable<any>} worker
+   * @param {Function} callback
    * @returns {Observable<any>}
    */
-  public cached(storageKey: string, worker: Observable<any>): Observable<any> {
+  public cached(storageKey: string, worker: Observable<any>, callback?: Function): Observable<any> {
     const subject = new Subject<any>();
 
     // fetch cache
@@ -42,6 +47,12 @@ export class CachingObservableService {
     // update when work is done
     worker
       .do(res => this.storage.setItem(storageKey, res))
+      .do(res => {
+        // when we have a callback function, call it with the new data
+        if(isFunction(callback)){
+          callback(res);
+        }
+      })
       .do(res => {
         subject.next(res);
       });
