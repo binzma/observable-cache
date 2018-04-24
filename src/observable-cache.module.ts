@@ -4,12 +4,14 @@ import {WindowRefService} from './utils/window-ref.service';
 import {SessionStorageService} from './storage-driver/session-storage.service';
 import {ObservableCacheService} from './observable-cache.service';
 import {ObservableCacheConfig} from './observable-cache.interfaces';
+import {StorageService} from './storage-driver/storage.service';
+import {DefaultStorageService} from './storage-driver/default-storage.service';
 
 
 let storageFactory = (observableCacheConfig: ObservableCacheConfig,
                       windowRef: WindowRefService) => {
-    return observableCacheConfig.storageDriver === 'LocalStorage' ?
-        new LocalStorageService(windowRef) : new SessionStorageService(windowRef);
+    return observableCacheConfig.storageDriver === 'SessionStorage' ?
+        new SessionStorageService(windowRef): new LocalStorageService(windowRef);
 };
 
 
@@ -21,7 +23,8 @@ export class ObservableCacheModule {
             ngModule: ObservableCacheModule,
             providers: [
                 {provide: 'observableCacheConfig', useValue: config},
-                {provide: 'DefaultStorageService', useFactory: storageFactory, deps: ['observableCacheConfig', WindowRefService]},
+                StorageService,
+                {provide: DefaultStorageService, useFactory: storageFactory, deps: ['observableCacheConfig', WindowRefService]},
                 ObservableCacheService,
                 SessionStorageService,
                 LocalStorageService,

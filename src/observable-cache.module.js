@@ -11,9 +11,11 @@ const local_storage_service_1 = require("./storage-driver/local-storage.service"
 const window_ref_service_1 = require("./utils/window-ref.service");
 const session_storage_service_1 = require("./storage-driver/session-storage.service");
 const observable_cache_service_1 = require("./observable-cache.service");
+const storage_service_1 = require("./storage-driver/storage.service");
+const default_storage_service_1 = require("./storage-driver/default-storage.service");
 let storageFactory = (observableCacheConfig, windowRef) => {
-    return observableCacheConfig.storageDriver === 'LocalStorage' ?
-        new local_storage_service_1.LocalStorageService(windowRef) : new session_storage_service_1.SessionStorageService(windowRef);
+    return observableCacheConfig.storageDriver === 'SessionStorage' ?
+        new session_storage_service_1.SessionStorageService(windowRef) : new local_storage_service_1.LocalStorageService(windowRef);
 };
 let ObservableCacheModule = ObservableCacheModule_1 = class ObservableCacheModule {
     static forRoot(config) {
@@ -21,7 +23,8 @@ let ObservableCacheModule = ObservableCacheModule_1 = class ObservableCacheModul
             ngModule: ObservableCacheModule_1,
             providers: [
                 { provide: 'observableCacheConfig', useValue: config },
-                { provide: 'DefaultStorageService', useFactory: storageFactory, deps: ['observableCacheConfig', window_ref_service_1.WindowRefService] },
+                storage_service_1.StorageService,
+                { provide: default_storage_service_1.DefaultStorageService, useFactory: storageFactory, deps: ['observableCacheConfig', window_ref_service_1.WindowRefService] },
                 observable_cache_service_1.ObservableCacheService,
                 session_storage_service_1.SessionStorageService,
                 local_storage_service_1.LocalStorageService,

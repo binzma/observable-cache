@@ -1,10 +1,9 @@
 import { Observable } from 'rxjs/Observable';
-import { LocalStorageService } from './storage-driver/local-storage.service';
 import 'rxjs/add/operator/do';
+import { DefaultStorageService } from './storage-driver/default-storage.service';
 export declare class ObservableCacheService {
-    private localStorageService;
     private storage;
-    constructor(localStorageService: LocalStorageService);
+    constructor(storage: DefaultStorageService);
     /**
      * Instantly emits cache if available and emits again with the new data after performing the work.
      *

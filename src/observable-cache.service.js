@@ -11,9 +11,8 @@ const Subject_1 = require("rxjs/Subject");
 const lodash_1 = require("lodash");
 require("rxjs/add/operator/do");
 let ObservableCacheService = class ObservableCacheService {
-    constructor(localStorageService) {
-        this.localStorageService = localStorageService;
-        this.storage = localStorageService;
+    constructor(storage) {
+        this.storage = storage;
     }
     /**
      * Instantly emits cache if available and emits again with the new data after performing the work.

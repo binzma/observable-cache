@@ -1,18 +1,14 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
-import {LocalStorageService} from './storage-driver/local-storage.service';
-import {StorageService} from './storage-driver/storage.service';
 import {Subject} from 'rxjs/Subject';
 import {isEmpty, isFunction} from 'lodash';
 import 'rxjs/add/operator/do';
+import {DefaultStorageService} from './storage-driver/default-storage.service';
 
 @Injectable()
 export class ObservableCacheService {
 
-  private storage: StorageService;
-
-  constructor(private localStorageService: LocalStorageService) {
-    this.storage = localStorageService;
+  constructor(private storage: DefaultStorageService) {
   }
 
   /**
