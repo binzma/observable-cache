@@ -1,6 +1,6 @@
 {
   "name": "observable-cache",
-  "version": "0.1.19",
+  "version": "0.1.20",
   "description": "Caching lib for Observables.",
   "main": "index.js",
   "scripts": {

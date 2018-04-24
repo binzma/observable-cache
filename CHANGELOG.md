@@ -1,3 +1,8 @@
+<a name="0.1.19"></a>
+## [0.1.19](https://github.com/binzma/observable-cache/compare/v0.1.18...v0.1.19) (2018-04-24)
+
+
+
 <a name="0.1.18"></a>
 ## [0.1.18](https://github.com/binzma/observable-cache/compare/v0.1.17...v0.1.18) (2018-04-24)
 
