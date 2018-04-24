@@ -23,7 +23,7 @@ export class ObservableCacheService {
     const subject = new Subject<any>();
 
     // fetch cache
-    const cache = this.storage.getItemAsObject(storageKey);
+    const cache = this.storage.getItem(storageKey);
 
     // emit cache if valid
     if (!isEmpty(cache)) {

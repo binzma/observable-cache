@@ -25,7 +25,7 @@ let ObservableCacheService = class ObservableCacheService {
     cached(storageKey, worker, callback) {
         const subject = new Subject_1.Subject();
         // fetch cache
-        const cache = this.storage.getItemAsObject(storageKey);
+        const cache = this.storage.getItem(storageKey);
         // emit cache if valid
         if (!lodash_1.isEmpty(cache)) {
             setTimeout(() => subject.next(cache));

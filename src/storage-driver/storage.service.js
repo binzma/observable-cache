@@ -1,21 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const lodash_1 = require("lodash");
+const memory_storage_1 = require("./memory-storage");
 class StorageService {
-    constructor(storage) {
-        this.storage = storage;
+    constructor(observableCacheConfig, windowRef) {
+        switch (observableCacheConfig.storageDriver) {
+            case 'SessionStorage':
+                this.storage = windowRef.getNativeWindow().sessionStorage;
+                break;
+            case 'LocalStorage':
+                this.storage = windowRef.getNativeWindow().localStorage;
+                break;
+            default:
+                this.storage = new memory_storage_1.MemoryStorage();
+                break;
+        }
     }
     getItem(key, defaultValue) {
-        let item = this.storage.getItem(key);
-        if ((lodash_1.isNull(item) || lodash_1.isUndefined(item)) && defaultValue) {
-            return defaultValue;
-        }
-        return item;
-    }
-    getItemAsObject(key) {
-        const item = this.getItem(key);
+        const item = this.storage.getItem(key);
         if (lodash_1.isNull(item) || lodash_1.isUndefined(item)) {
-            return {};
+            return defaultValue ? defaultValue : {};
         }
         else {
             return JSON.parse(item);

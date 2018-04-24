@@ -1,3 +1,3 @@
 export class ObservableCacheConfig {
-    storageDriver?: 'LocalStorage'|'SessionStorage';
+    storageDriver?: 'LocalStorage'|'SessionStorage'|'MemoryStorage';
 }

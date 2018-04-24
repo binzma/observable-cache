@@ -1,23 +1,33 @@
 import {isNull, isUndefined, isString} from 'lodash';
+import {WindowRefService} from '../utils/window-ref.service';
+import {ObservableCacheConfig} from '../observable-cache.interfaces';
+import {MemoryStorage} from './memory-storage';
 
 export class StorageService {
 
-    constructor(private storage: Storage) {
-    }
+    private storage: Storage;
 
-    public getItem(key: string, defaultValue?: any): string {
-        let item = this.storage.getItem(key);
+    constructor(observableCacheConfig: ObservableCacheConfig,
+                windowRef: WindowRefService) {
 
-        if ((isNull(item) || isUndefined(item)) && defaultValue) {
-            return defaultValue;
+        switch (observableCacheConfig.storageDriver) {
+            case 'SessionStorage':
+                this.storage = windowRef.getNativeWindow().sessionStorage;
+                break;
+            case 'LocalStorage':
+                this.storage = windowRef.getNativeWindow().localStorage;
+                break;
+            default:
+                this.storage = new MemoryStorage();
+                break;
         }
-        return item;
+
     }
 
-    public getItemAsObject<T>(key: string): T {
-        const item = this.getItem(key);
+    public getItem<T>(key: string, defaultValue?: any): T {
+        const item = this.storage.getItem(key);
         if (isNull(item) || isUndefined(item)) {
-            return <any>{};
+            return defaultValue ? defaultValue : <any>{};
         }
         else {
             return <T>JSON.parse(item);
