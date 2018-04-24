@@ -1,7 +1,5 @@
-import {Injectable} from '@angular/core';
 import {isNull, isUndefined, isString} from 'lodash';
 
-@Injectable()
 export class StorageService {
 
     constructor(private storage: Storage) {

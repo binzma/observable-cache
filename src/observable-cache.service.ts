@@ -3,12 +3,12 @@ import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
 import {isEmpty, isFunction} from 'lodash';
 import 'rxjs/add/operator/do';
-import {DefaultStorageService} from './storage-driver/default-storage.service';
+import {StorageService} from './storage-driver/storage.service';
 
 @Injectable()
 export class ObservableCacheService {
 
-  constructor(private storage: DefaultStorageService) {
+  constructor(private storage: StorageService) {
   }
 
   /**
