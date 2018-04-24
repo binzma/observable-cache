@@ -72,10 +72,11 @@ export class ObservableCacheService {
                     if (isFunction(config.afterUpdate)) {
                         config.afterUpdate(res);
                     }
-
-                    // emit the new data
-                    subject.next(res);
-                });
+                })
+                .subscribe(
+                    res => subject.next(res),
+                    err => subject.error(err)
+                );
         }
 
         return subject.asObservable();
