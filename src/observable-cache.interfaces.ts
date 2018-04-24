@@ -1,5 +1,6 @@
 export class ObservableCacheConfig {
     storageDriver?: 'LocalStorage'|'SessionStorage'|'MemoryStorage';
+    cacheExpiry?: number;
 }
 
 export interface StorageDriver {

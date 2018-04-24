@@ -5,6 +5,7 @@ import {isEmpty, isFunction} from 'lodash';
 import 'rxjs/add/operator/do';
 // import {ObservableCacheConfig} from './observable-cache.interfaces';
 import {LocalStorage} from './storage-driver/local-storage';
+import {differenceInSeconds, format, parse} from 'date-fns';
 // import {SessionStorage} from './storage-driver/session-storage';
 // import {MemoryStorage} from './storage-driver/memory-storage';
 
@@ -36,7 +37,7 @@ export class ObservableCacheService {
      * @param {Function} callback
      * @returns {Observable<any>}
      */
-    public cached(storageKey: string, worker: Observable<any>, callback?: Function): Observable<any> {
+    public asyncUpdate(storageKey: string, worker: Observable<any>, callback?: Function): Observable<any> {
         const subject = new Subject<any>();
 
         // fetch cache
@@ -52,13 +53,59 @@ export class ObservableCacheService {
             .do(res => this.storageService.setItem(storageKey, res))
             .do(res => {
                 // when we have a callback function, call it with the new data
-                if(isFunction(callback)){
+                if (isFunction(callback)) {
                     callback(res);
                 }
             })
             .do(res => {
                 subject.next(res);
             });
+
+        return subject.asObservable();
+    }
+
+    /**
+     * Instantly emits cache if available and queries the resource async if cache is older than afterSeconds.
+     *
+     * @param {string} storageKey
+     * @param {Observable<any>} worker
+     * @param {number} afterSeconds
+     * @param {Function} callback
+     * @returns {Observable<any>}
+     */
+    public asyncUpdateAfter(storageKey: string, worker: Observable<any>, afterSeconds: number, callback?: Function): Observable<any> {
+        const subject = new Subject<any>();
+
+        // fetch cache
+        const cache = this.storageService.getItem(storageKey);
+
+        // emit cache if valid
+        if (!isEmpty(cache)) {
+            setTimeout(() => subject.next(cache));
+        }
+
+        // only update if cache is older than afterSeconds
+        const cacheDate = this.storageService.getItem<string>(`${storageKey}-cache-date`);
+        if (!cacheDate || differenceInSeconds(parse(cacheDate), new Date()) > afterSeconds) {
+
+            // start update
+            worker
+                .do(res => {
+                    // update cache
+                    this.storageService.setItem(storageKey, res);
+
+                    // update cache time
+                    this.storageService.setItem(`${storageKey}-cache-date`, format(new Date()));
+
+                    // when we have a callback function, call it with the new data
+                    if (isFunction(callback)) {
+                        callback(res);
+                    }
+
+                    // emit the new data
+                    subject.next(res);
+                });
+        }
 
         return subject.asObservable();
     }
