@@ -11,7 +11,12 @@ class SessionStorage {
             return defaultValue ? defaultValue : {};
         }
         else {
-            return JSON.parse(item);
+            try {
+                return JSON.parse(item);
+            }
+            catch (e) {
+                return item;
+            }
         }
     }
     setItem(key, value) {

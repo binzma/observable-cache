@@ -85,7 +85,7 @@ export class ObservableCacheService {
         }
 
         // only update if cache is older than afterSeconds
-        const cacheDate = this.storageService.getItem<string>(`${storageKey}-cache-date`);
+        const cacheDate = this.storageService.getItem(`${storageKey}-cache-date`);
         if (!cacheDate || differenceInSeconds(parse(cacheDate), new Date()) > afterSeconds) {
 
             // start update

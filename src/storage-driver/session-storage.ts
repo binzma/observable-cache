@@ -5,17 +5,22 @@ export class SessionStorage implements StorageDriver {
 
     private storage = window.sessionStorage;
 
-    public getItem<T>(key: string, defaultValue?: any): T {
+    public getItem(key: string, defaultValue?: any) {
         const item = this.storage.getItem(key);
         if (isNull(item) || isUndefined(item)) {
-            return defaultValue ? defaultValue : <any>{};
+            return defaultValue ? defaultValue : {};
         }
         else {
-            return <T>JSON.parse(item);
+            try {
+                return JSON.parse(item);
+            }
+            catch (e) {
+                return item;
+            }
         }
     }
 
-    public setItem<T>(key: string, value: T): void {
+    public setItem(key: string, value): void {
         if (isString(value)) {
             this.storage.setItem(key, value);
         }
