@@ -1,3 +1,13 @@
+<a name="0.1.8"></a>
+## [0.1.8](https://github.com/binzma/observable-cache/compare/v0.1.7...v0.1.8) (2018-04-24)
+
+
+### Features
+
+* **root module:** added forRoot ([575c381](https://github.com/binzma/observable-cache/commit/575c381))
+
+
+
 <a name="0.1.7"></a>
 ## [0.1.7](https://github.com/binzma/observable-cache/compare/v0.1.6...v0.1.7) (2018-04-24)
 
