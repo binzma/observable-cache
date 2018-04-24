@@ -16,17 +16,6 @@ export class ObservableCacheService {
   }
 
   /**
-   * Use this to set a non-default storage service.
-   *
-   * TODO put this in config
-   *
-   * @param {StorageService} storageService
-   */
-  public setStorageService(storageService: StorageService): void {
-    this.storage = storageService;
-  }
-
-  /**
    * Instantly emits cache if available and emits again with the new data after performing the work.
    *
    * @param {string} storageKey
