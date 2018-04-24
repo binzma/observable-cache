@@ -1,0 +1,35 @@
+{
+  "name": "observable-cache",
+  "version": "0.1.0",
+  "description": "Caching lib for Observables.",
+  "main": "index.ts",
+  "scripts": {
+    "dist": "tsc",
+    "preversion": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add -A",
+    "postversion": "git push --tags && npm publish",
+    "ci": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/binzma/observable-cache.git"
+  },
+  "keywords": [
+    "Angular",
+    "Observable",
+    "Cache",
+    "Offline",
+    "Async"
+  ],
+  "author": "Manuel Binz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/binzma/observable-cache/issues"
+  },
+  "homepage": "https://github.com/binzma/observable-cache#readme",
+  "devDependencies": {
+    "@angular/core": "^5.2.10",
+    "@types/lodash": "^4.14.107",
+    "lodash": "^4.17.5",
+    "rxjs": "^5.5.10"
+  }
+}
