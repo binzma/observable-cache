@@ -2,7 +2,7 @@
   "name": "observable-cache",
   "version": "0.1.2",
   "description": "Caching lib for Observables.",
-  "main": "index.ts",
+  "main": "index.d.ts",
   "scripts": {
     "dist": "tsc",
     "preversion": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add -A",
