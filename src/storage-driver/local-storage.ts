@@ -1,26 +1,9 @@
 import {isNull, isUndefined, isString} from 'lodash';
-import {ObservableCacheConfig} from '../observable-cache.interfaces';
-import {MemoryStorage} from './memory-storage';
+import {StorageDriver} from '../observable-cache.interfaces';
 
-export class StorageService {
+export class LocalStorage implements StorageDriver {
 
-    private storage: Storage;
-
-    constructor(observableCacheConfig: ObservableCacheConfig) {
-
-        switch (observableCacheConfig.storageDriver) {
-            case 'SessionStorage':
-                this.storage = window.sessionStorage;
-                break;
-            case 'LocalStorage':
-                this.storage = window.localStorage;
-                break;
-            default:
-                this.storage = new MemoryStorage();
-                break;
-        }
-
-    }
+    private storage = window.localStorage;
 
     public getItem<T>(key: string, defaultValue?: any): T {
         const item = this.storage.getItem(key);

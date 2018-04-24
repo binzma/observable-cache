@@ -3,47 +3,64 @@ import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
 import {isEmpty, isFunction} from 'lodash';
 import 'rxjs/add/operator/do';
-import {StorageService} from './storage-driver/storage.service';
+// import {ObservableCacheConfig} from './observable-cache.interfaces';
+import {LocalStorage} from './storage-driver/local-storage';
+// import {SessionStorage} from './storage-driver/session-storage';
+// import {MemoryStorage} from './storage-driver/memory-storage';
 
 @Injectable()
 export class ObservableCacheService {
 
-  constructor(private storage: StorageService) {
-  }
+    private storageService = new LocalStorage();
 
-  /**
-   * Instantly emits cache if available and emits again with the new data after performing the work.
-   *
-   * @param {string} storageKey
-   * @param {Observable<any>} worker
-   * @param {Function} callback
-   * @returns {Observable<any>}
-   */
-  public cached(storageKey: string, worker: Observable<any>, callback?: Function): Observable<any> {
-    const subject = new Subject<any>();
+    // constructor(observableCacheConfig: ObservableCacheConfig) {
+    //
+    //   switch (observableCacheConfig.storageDriver) {
+    //     case 'SessionStorage':
+    //       this.storageService = new SessionStorage();
+    //       break;
+    //     case 'LocalStorage':
+    //       this.storageService = new LocalStorage();
+    //       break;
+    //     default:
+    //       this.storageService = new MemoryStorage();
+    //       break;
+    //   }
+    // }
 
-    // fetch cache
-    const cache = this.storage.getItem(storageKey);
+    /**
+     * Instantly emits cache if available and emits again with the new data after performing the work.
+     *
+     * @param {string} storageKey
+     * @param {Observable<any>} worker
+     * @param {Function} callback
+     * @returns {Observable<any>}
+     */
+    public cached(storageKey: string, worker: Observable<any>, callback?: Function): Observable<any> {
+        const subject = new Subject<any>();
 
-    // emit cache if valid
-    if (!isEmpty(cache)) {
-      setTimeout(() => subject.next(cache));
-    }
+        // fetch cache
+        const cache = this.storageService.getItem(storageKey);
 
-    // update when work is done
-    worker
-      .do(res => this.storage.setItem(storageKey, res))
-      .do(res => {
-        // when we have a callback function, call it with the new data
-        if(isFunction(callback)){
-          callback(res);
+        // emit cache if valid
+        if (!isEmpty(cache)) {
+            setTimeout(() => subject.next(cache));
         }
-      })
-      .do(res => {
-        subject.next(res);
-      });
 
-    return subject.asObservable();
-  }
+        // update when work is done
+        worker
+            .do(res => this.storageService.setItem(storageKey, res))
+            .do(res => {
+                // when we have a callback function, call it with the new data
+                if(isFunction(callback)){
+                    callback(res);
+                }
+            })
+            .do(res => {
+                subject.next(res);
+            });
+
+        return subject.asObservable();
+    }
 
 }

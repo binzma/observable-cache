@@ -1,5 +1,6 @@
+import {StorageDriver} from '../observable-cache.interfaces';
 
-export class MemoryStorage extends Storage {
+export class MemoryStorage extends Storage implements StorageDriver{
 
     private data = {};
 
