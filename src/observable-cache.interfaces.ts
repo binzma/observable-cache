@@ -1,3 +1,3 @@
-export interface ObservableCacheConfig {
+export class ObservableCacheConfig {
     storageDriver?: 'LocalStorage'|'SessionStorage';
 }

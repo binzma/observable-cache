@@ -4,7 +4,6 @@ import {WindowRefService} from './utils/window-ref.service';
 import {SessionStorageService} from './storage-driver/session-storage.service';
 import {ObservableCacheService} from './observable-cache.service';
 import {ObservableCacheConfig} from './observable-cache.interfaces';
-import {StorageService} from './storage-driver/storage.service';
 import {DefaultStorageService} from './storage-driver/default-storage.service';
 
 
@@ -22,13 +21,12 @@ export class ObservableCacheModule {
         return {
             ngModule: ObservableCacheModule,
             providers: [
-                {provide: 'observableCacheConfig', useValue: config},
-                StorageService,
+                {provide: ObservableCacheConfig, useValue: config},
                 {provide: DefaultStorageService, useFactory: storageFactory, deps: ['observableCacheConfig', WindowRefService]},
-                ObservableCacheService,
                 SessionStorageService,
                 LocalStorageService,
-                WindowRefService
+                WindowRefService,
+                ObservableCacheService
             ]
         };
 
