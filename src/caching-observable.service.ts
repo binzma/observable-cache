@@ -4,6 +4,7 @@ import {LocalStorageService} from './storage-driver/local-storage.service';
 import {StorageService} from './storage-driver/storage.service';
 import {Subject} from 'rxjs/Subject';
 import {isEmpty, isFunction} from 'lodash';
+import 'rxjs/add/operator/do';
 
 @Injectable()
 export class CachingObservableService {
